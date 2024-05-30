@@ -12,12 +12,12 @@ from app.models.todo_model import Todo
 from app.models.user_model import User
 
 
-application = FastAPI(
+app = FastAPI(
     title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
 conn_manager = ConnectionManager()
 
-application.add_middleware(
+app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
@@ -26,7 +26,7 @@ application.add_middleware(
 )
 
 
-@application.on_event("startup")
+@app.on_event("startup")
 async def app_init():
     """
     initialize crucial application services
@@ -36,15 +36,15 @@ async def app_init():
     await init_beanie(database=db_client, document_models=[User, Todo])
 
 
-@application.websocket("/ws/{user_id}")
+@app.websocket("/ws/{user_id}")
 async def connect_user(websocket: WebSocket, user_id: UUID):
     await conn_manager.connect(user_id, websocket)
     try:
         while True:
-            data = await websocket.receive_json()
+            data = None
             print(data)
     except WebSocketDisconnect:
         conn_manager.disconnect(websocket)
 
 
-application.include_router(router, prefix=settings.API_V1_STR)
+app.include_router(router, prefix=settings.API_V1_STR)

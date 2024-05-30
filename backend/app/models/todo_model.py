@@ -1,15 +1,17 @@
-from typing import Optional
 from datetime import datetime
 from uuid import UUID, uuid4
-from beanie import Document, Indexed, Link, before_event, Replace, Insert
+
+from beanie import Document, Indexed, Insert, Link, Replace, before_event
 from pydantic import Field
+
 from .user_model import User
+
 
 class Todo(Document):
     todo_id: UUID = Field(default_factory=uuid4, unique=True)
     status: bool = False
     title: Indexed(str)
-    description: str = None
+    description: str | None = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     owner: Link[User]
@@ -34,7 +36,7 @@ class Todo(Document):
         if isinstance(other, Todo):
             return self.todo_id == other.todo_id
         return False
-    
+
     @before_event([Replace, Insert])
     def update_update_at(self):
         self.updated_at = datetime.utcnow()

@@ -28,7 +28,8 @@ export const TodoDetail = () => {
   const { todoOpen, setTodoOpen } = useTodoContext();
 
   useEffect(() => {
-    fetchTodo();
+    console.log(todoOpen)
+    if (todoOpen !== null) fetchTodo();
   }, [todoId]);
 
   const fetchTodo = () => {
@@ -37,7 +38,7 @@ export const TodoDetail = () => {
       .get(`/todo/${todoId}`)
       .then((res) => {
         setTodoOpen(res.data);
-        console.log(res.data)
+        console.log("res", res.data)
         document.title = res.data.title;
       })
       .catch((error) => console.error(error))

@@ -7,15 +7,11 @@ from app.api.api_v1.router import router
 from app.core.config import settings
 from app.models.todo_model import Todo
 from app.models.user_model import User
-from app.sockets import sio_app
-
-import socketio
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
-app.mount('/', app=sio_app)
 
 app.add_middleware(
     CORSMiddleware,

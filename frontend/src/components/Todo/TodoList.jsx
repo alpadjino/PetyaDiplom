@@ -11,7 +11,6 @@ import { UserInfo } from "../Navbar/UserInfo/UserInfo";
 import { Outlet, useNavigate } from "react-router-dom";
 import { AddToGroupModal } from "./AddToGroupModal";
 import { OtherTodo } from "./OtherTodo";
-import SocketComponent from "../SocketComponent/SocketComponent";
 
 export const TodoList = () => {
   const [todos, setTodos] = useState([]);
@@ -20,7 +19,40 @@ export const TodoList = () => {
   const [load, setLoad] = useState(true);
   const isMounted = useRef(false);
   
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+
+  const [websckt, setWebsckt] = useState();
+  const [message, setMessage] = useState([]);
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    const url = "ws://localhost:8000/ws/" + user.user_id;
+    const ws = new WebSocket(url);
+
+    ws.onopen = (event) => {
+      ws.send("Connect");
+    };
+
+    // recieve message every start page
+    ws.onmessage = (e) => {
+      const message = JSON.parse(e.data);
+      setMessages([...messages, message]);
+    };
+
+    setWebsckt(ws);
+    //clean up function when we close page
+    return () => ws.close();
+  }, []);
+  
+  const sendMessage = () => {
+      websckt.send(message);
+      // recieve message every send message
+      websckt.onmessage = (e) => {
+        const message = JSON.parse(e.data);
+        setMessages([...messages, message]);
+      };
+      setMessage([]);
+  };
 
   useEffect(() => {
     if (isMounted.current) return;
@@ -59,7 +91,7 @@ export const TodoList = () => {
         className={styles.todoListContainer}
         bg={useColorModeValue("gray.100", "gray.200")}
       >
-        <Flex flexDirection={"column"} gap={"10px"} width={"100%"}>
+        <Flex flexDirection={"column"} height="100%" gap={"10px"} width={"100%"}>
           <UserInfo />
           <AddUpdateTodoModal onSuccess={fetchTodos} />
           <AddToGroupModal />
@@ -85,8 +117,6 @@ export const TodoList = () => {
             ))}
 
             <OtherTodo otherTodo={otherTodos} setLoading={setLoad} />
-
-            <SocketComponent />
 
             {/* {otherTodos.map((todo) => {
               return (

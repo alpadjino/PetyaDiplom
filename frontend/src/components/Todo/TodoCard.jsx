@@ -12,7 +12,6 @@ import { todoUpdate } from "../../utils/apiFunctions";
 import { useAuth } from "../../hooks/useAuth";
 
 export const TodoCard = ({ todo, setLoading }) => {
-  console.log(todo);
   const { todoOpen, setTodoOpen } = useTodoContext();
   const { user } = useAuth();
 
@@ -24,6 +23,7 @@ export const TodoCard = ({ todo, setLoading }) => {
     axiosInstance
       .delete(`/todo/${todo.todo_id}`)
       .then(() => {
+        setTodoOpen(null);
         toast({
           title: "Успешно удален",
           status: "success",
@@ -67,7 +67,6 @@ export const TodoCard = ({ todo, setLoading }) => {
           setTodoOpen(null);
           navigate("/");
         } else {
-          console.log(window.location.href);
           todoUpdate({ todoId: todoOpen.todo_id, data: todoOpen });
           navigate(`/todos/${todo.todo_id}`);
           setTodoOpen(todo);
@@ -101,10 +100,10 @@ export const TodoCard = ({ todo, setLoading }) => {
             ? "Выполнен"
             : "Выполняется"}
         </Badge>
-
         {todo.owner?.id == user._id && (
           <Menu>
             <MenuButton
+            onClick={(event) => event.stopPropagation()}
               aria-label="Options"
               variant="outline"
               padding={"10px"}

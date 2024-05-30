@@ -1,0 +1,15 @@
+.userInfo {
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.userInfo button:hover {
+    background-color: aliceblue;
+}
+
+.userInfo:hover {
+    background-color: darkgrey;
+}

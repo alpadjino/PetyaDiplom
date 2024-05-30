@@ -1,0 +1,25 @@
+.todoListContainer {
+    flex-direction: column;
+    width: 100%;
+    max-width: 350px;
+    font-size: smaller;
+    font-weight: 600;
+    height: 100vh;
+    overflow-y: scroll;
+}
+
+.todoLeftList {
+        padding: 10px;
+}
+
+.leftListBottom {
+    display: flex;
+    position: sticky;
+    bottom: 0;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    align-items: center;
+    background-color: white;
+    padding: 10px;
+    z-index: 100;
+}

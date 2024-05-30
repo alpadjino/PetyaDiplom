@@ -11,7 +11,6 @@ from app.core.config import settings
 from app.models.todo_model import Todo
 from app.models.user_model import User
 
-
 app = FastAPI(
     title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
@@ -41,7 +40,7 @@ async def connect_user(websocket: WebSocket, user_id: UUID):
     await conn_manager.connect(user_id, websocket)
     try:
         while True:
-            data = None
+            data = await websocket.receive_text()
             print(data)
     except WebSocketDisconnect:
         conn_manager.disconnect(websocket)

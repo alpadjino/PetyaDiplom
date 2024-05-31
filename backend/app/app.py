@@ -6,15 +6,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from app.api.api_v1.router import router
-from app.connection_manager import ConnectionManager
 from app.core.config import settings
 from app.models.todo_model import Todo
 from app.models.user_model import User
+from backend.app.connection_managers.container import connections_container
 
 app = FastAPI(
     title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
-conn_manager = ConnectionManager()
 
 app.add_middleware(
     CORSMiddleware,
@@ -37,13 +36,23 @@ async def app_init():
 
 @app.websocket("/ws/{user_id}")
 async def connect_user(websocket: WebSocket, user_id: UUID):
-    await conn_manager.connect(user_id, websocket)
+    await websocket.accept()
     try:
         while True:
-            data = await websocket.receive_text()
-            print(data)
+            await websocket.receive_text()
     except WebSocketDisconnect:
-        conn_manager.disconnect(websocket)
+        return
+
+
+@app.websocket("/ws/connect_{user_id}_to_{room_id}")
+async def connect_user_to_room(websocket: WebSocket, user_id: UUID, room_id: UUID):
+    await connections_container.todo_rooms.connect(room_id, websocket)
+    try:
+        while True:
+            await websocket.receive_json()
+            await connections_container.todo_rooms.broadcast(room_id, user_id)
+    except WebSocketDisconnect:
+        connections_container.todo_rooms.disconnect(room_id, websocket)
 
 
 app.include_router(router, prefix=settings.API_V1_STR)

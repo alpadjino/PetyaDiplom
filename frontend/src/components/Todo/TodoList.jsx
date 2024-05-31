@@ -43,16 +43,6 @@ export const TodoList = () => {
     //clean up function when we close page
     return () => ws.close();
   }, []);
-  
-  const sendMessage = () => {
-      websckt.send(message);
-      // recieve message every send message
-      websckt.onmessage = (e) => {
-        const message = JSON.parse(e.data);
-        setMessages([...messages, message]);
-      };
-      setMessage([]);
-  };
 
   useEffect(() => {
     if (isMounted.current) return;

@@ -19,13 +19,49 @@ import Details from "../TipTap/Details";
 
 import EditorJS from "@editorjs/editorjs";
 import { useTodoContext } from "../../context/TodoIsOpenContext";
+import { useAuth } from "../../hooks/useAuth";
 
 export const TodoDetail = () => {
   const [todo, setTodo] = useState({});
   const [loading, setLoading] = useState(true);
   const { todoId } = useParams();
 
+  const { user } = useAuth();
+
   const { todoOpen, setTodoOpen } = useTodoContext();
+
+    const [websckt, setWebsckt] = useState();
+    const [message, setMessage] = useState([]);
+    const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+      const url = "ws://localhost:8000/ws/" + user.user_id;
+      const ws = new WebSocket(url);
+      // TODO Тут должно быть подключение к руме
+      ws.onopen = (event) => {
+        ws.send("Connect");
+      };
+
+      // recieve message every start page
+      ws.onmessage = (e) => {
+        const message = JSON.parse(e.data);
+        setMessages([...messages, message]);
+      };
+
+      setWebsckt(ws);
+      //clean up function when we close page
+      return () => ws.close();
+    }, []);
+
+  const sendMessage = (message) => {
+    websckt.send(message);
+    // recieve message every send message
+    websckt.onmessage = (e) => {
+      const message = JSON.parse(e.data);
+      setMessages([...messages, message]);
+    };
+    setMessage([]);
+  };
 
   useEffect(() => {
     console.log(todoOpen)
@@ -103,7 +139,12 @@ export const TodoDetail = () => {
         <Details description={description} />
       </div> */}
 
-      <MarkdownEditor setValue={setTodoOpen} value={todoOpen} />
+      <MarkdownEditor
+        setValue={setTodoOpen}
+        value={todoOpen}
+        sendMessage={sendMessage}
+        message={message}
+      />
       {/* 
       <EditorJS /> */}
     </Flex>

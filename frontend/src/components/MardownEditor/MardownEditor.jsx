@@ -83,118 +83,126 @@ const Code = React.forwardRef(({ inline, children = [], className, ...props }, r
   return <code className={className} ref={ref}>{children}</code>;
 });
 
-export default function MardownEditor({value, setValue}) {
-    const navigate = useNavigate();
+export default function MardownEditor({ value, setValue, sendMessage, message }) {
+  const navigate = useNavigate();
 
-    return (
-      <Box
-        overflow={"hidden"}
-        overflowY={"scroll"}
-        padding={"20px"}
-        maxH={"100vh"}
+  return (
+    <Box
+      overflow={"hidden"}
+      overflowY={"scroll"}
+      padding={"20px"}
+      maxH={"100vh"}
+    >
+      <Flex
+        flexDirection={"column"}
+        borderWidth={"20px"}
+        bgColor={"white"}
+        borderRadius={"20px"}
+        borderColor={"white"}
+        gap={"10px"}
       >
-        <Flex
-          flexDirection={"column"}
-          borderWidth={"20px"}
-          bgColor={"white"}
-          borderRadius={"20px"}
-          borderColor={"white"}
-          gap={"10px"}
-        >
-          {/* Center отвечает за заголовок и поле Input с заголовком */}
-          <Center flexDir={"column"} color={"black"}>
-            <Flex
-              alignItems={"center"}
-              justifyContent={"space-between"}
-              width={"100%"}
+        {/* Center отвечает за заголовок и поле Input с заголовком */}
+        <Center flexDir={"column"} color={"black"}>
+          <Flex
+            alignItems={"center"}
+            justifyContent={"space-between"}
+            width={"100%"}
+          >
+            <Text>Заголовок</Text>
+
+            <Button
+              colorScheme="gray"
+              color={"black"}
+              onClick={() => {
+                todoUpdate({ todoId: value.todo_id, data: value });
+                setValue(null);
+                navigate("/", { replace: true });
+                document.title = "Главная";
+                // Отправить запрос на бек с сохранением данных
+              }}
             >
-              <Text>Заголовок</Text>
+              <CloseIcon />
+            </Button>
+          </Flex>
 
-              <Button
-                colorScheme="gray"
-                color={"black"}
-                onClick={() => {
-                  todoUpdate({todoId: value.todo_id, data: value})
-                  setValue(null);
-                  navigate("/", { replace: true });
-                  document.title = "Главная";
-                  // Отправить запрос на бек с сохранением данных
-                }}
-              >
-                <CloseIcon />
-              </Button>
-            </Flex>
-
-            <Flex alignItems={"center"} justifyContent={"space-between"} width={"100%"} gap={"15px"} flexDir={"row-reverse"}>
-              <Box>
-                <Switch
-                  title="Статус выполнения"
-                  onChange={(e) => {
-                    const updatedTodo = {
-                      ...value,
-                      status: e.target.checked,
-                    };
-                    setValue(updatedTodo);
-                  }}
-                  isChecked={value?.status}
-                  id="id-done"
-                  size="lg"
-                  name="status"
-                  isDisabled={false}
-                  colorScheme="green"
-                  bgColor={"red"}
-                  padding={0}
-                  borderRadius={"15px"}
-                />
-              </Box>
-
-              <Input
-                value={value?.title}
-                onChange={(event) => {
+          <Flex
+            alignItems={"center"}
+            justifyContent={"space-between"}
+            width={"100%"}
+            gap={"15px"}
+            flexDir={"row-reverse"}
+          >
+            <Box>
+              <Switch
+                title="Статус выполнения"
+                onChange={(e) => {
                   const updatedTodo = {
                     ...value,
-                    title: event.target.value,
+                    status: e.target.checked,
                   };
                   setValue(updatedTodo);
                 }}
-                bgColor="gray.100"
-                color={"black"}
-                placeholder={"Заголовок"}
+                isChecked={value?.status}
+                id="id-done"
+                size="lg"
+                name="status"
+                isDisabled={false}
+                colorScheme="green"
+                bgColor={"red"}
+                padding={0}
+                borderRadius={"15px"}
               />
-            </Flex>
-          </Center>
+            </Box>
 
-          {/* Кастомный эдитор текста, позволяет создавать текст с помощью Markdown, 
+            <Input
+              value={value?.title}
+              onChange={(event) => {
+                const updatedTodo = {
+                  ...value,
+                  title: event.target.value,
+                };
+                sendMessage(updatedTodo);
+                console.log(message)
+                setValue(updatedTodo);
+              }}
+              bgColor="gray.100"
+              color={"black"}
+              placeholder={"Заголовок"}
+            />
+          </Flex>
+        </Center>
+
+        {/* Кастомный эдитор текста, позволяет создавать текст с помощью Markdown, 
             а так же подключил mermaid для создания графиков. Это делается за счет расширения ключевых слов в маркдаунах.
             Синтаксис можно на оф сайте посмотреть, концептуально он не сложный от слова совсем, но позволяет делать 
             неплохие графики для большинства  
             */}
 
-          <MDEditor
-            onChange={(newContent) => {
-              const updatedTodo = {
-                ...value,
-                description: newContent,
-              };
-              setValue(updatedTodo);
-            }}
-            textareaProps={{
-              placeholder: "Please enter Markdown text",
-            }}
-            height={"100%"}
-            overflow={true}
-            value={value?.description}
-            previewOptions={{
-              components: {
-                code: Code,
-              },
-            }}
-          />
+        <MDEditor
+          onChange={(newContent) => {
+            const updatedTodo = {
+              ...value,
+              description: newContent,
+            };
+            setValue(updatedTodo);
+          }}
+          textareaProps={{
+            placeholder: "Please enter Markdown text",
+          }}
+          height={"100%"}
+          overflow={true}
+          value={value.description}
+          previewOptions={{
+            components: {
+              code: Code,
+            },
+          }}
+        />
 
-          {/* <Center>
+        {/* <Center>
             <Button colorScheme="green">Сохранить</Button>
           </Center> */}
-        </Flex>
-      </Box>
-    );
+      </Flex>
+    </Box>
+  );
 }

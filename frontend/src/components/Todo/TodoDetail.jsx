@@ -21,6 +21,7 @@ import EditorJS from "@editorjs/editorjs";
 import { useTodoContext } from "../../context/TodoIsOpenContext";
 import { useAuth } from "../../hooks/useAuth";
 import { todoSave, todoUpdate } from "../../utils/apiFunctions";
+import { useIsMobileContext } from "../../context/IsMobileContext";
 
 export const TodoDetail = () => {
   const [todo, setTodo] = useState({});
@@ -30,6 +31,7 @@ export const TodoDetail = () => {
   const { user } = useAuth();
 
   const { todoOpen, setTodoOpen } = useTodoContext();
+  const { isMobile, setIsMobile, defaultValue} = useIsMobileContext();
 
     const [websckt, setWebsckt] = useState();
 
@@ -41,22 +43,30 @@ export const TodoDetail = () => {
   };
 
   useEffect(() => {
-    console.log("todo", todoOpen);
-    if (todoOpen !== null) fetchTodo();
+    console.log("создался", loading, todoId, todoOpen === null);
 
-          const url = `ws://localhost:8000/ws/${user.user_id}/${todoId}`;
-          const ws = new WebSocket(url);
+    if (defaultValue === true) setIsMobile(defaultValue);
+    console.log("todoOpen", todoOpen);
+    if (todoOpen === null) fetchTodo();
 
-          ws.onmessage = (e) => {
-            const message = JSON.parse(e.data);
-            console.log("KAIIIIF", message);
-            setTodoOpen(message);
-          };
-          
-          setWebsckt(ws);
+    const url = `ws://localhost:8000/ws/${user.user_id}/${todoId}`;
+    const ws = new WebSocket(url);
 
-          return () => ws.close();
-  }, []);
+    ws.onmessage = (e) => {
+      const message = JSON.parse(e.data);
+      console.log("KAIIIIF", message);
+      setTodoOpen(message);
+    };
+
+    setWebsckt(ws);
+
+    return () => {
+      ws.close();
+      console.log("Сломався");
+      setTodoOpen(null);
+      setLoading(true);
+    };
+  }, [todoId]);
 
   const fetchTodo = () => {
     setLoading(true);
@@ -95,9 +105,8 @@ export const TodoDetail = () => {
         setValue={setTodoOpen}
         value={todoOpen}
         commitMessage={commitMessage}
+        loading={loading}
       />
-      {/* 
-      <EditorJS /> */}
     </Flex>
   );
 };

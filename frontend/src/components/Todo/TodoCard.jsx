@@ -10,6 +10,7 @@ import axiosInstance from "../../services/axios";
 import { useEffect, useState } from "react";
 import { todoUpdate } from "../../utils/apiFunctions";
 import { useAuth } from "../../hooks/useAuth";
+import { useIsMobileContext } from "../../context/IsMobileContext";
 
 export const TodoCard = ({ todo, setLoading }) => {
   const { todoOpen, setTodoOpen } = useTodoContext();
@@ -18,8 +19,13 @@ export const TodoCard = ({ todo, setLoading }) => {
   const navigate = useNavigate();
   const toast = useToast();
 
+  const { setIsMobile, defaultValue } = useIsMobileContext();
+
   const delateTodo = () => {
     setLoading(true);
+    setTodoOpen(null);
+    navigate("/");
+    
     axiosInstance
       .delete(`/todo/${todo.todo_id}`)
       .then(() => {
@@ -60,16 +66,18 @@ export const TodoCard = ({ todo, setLoading }) => {
       }}
       onClick={() => {
         if (todoOpen === null) {
-          setTodoOpen(todo);
+          // setTodoOpen(todo);
+          if (defaultValue === true) setIsMobile(defaultValue);
           navigate(`todos/${todo.todo_id}`);
         } else if (todoOpen.todo_id === todo.todo_id) {
           todoUpdate({ todoId: todo.todo_id, data: todoOpen });
-          setTodoOpen(null);
+          // setTodoOpen(null);
+          if (defaultValue === true) setIsMobile(!defaultValue);
           navigate("/");
         } else {
           todoUpdate({ todoId: todoOpen.todo_id, data: todoOpen });
+          setTodoOpen(null);
           navigate(`/todos/${todo.todo_id}`);
-          setTodoOpen(todo);
         }
       }}
     >

@@ -1,5 +1,6 @@
 .todoListContainer {
     flex-direction: column;
+    justify-content: space-between;
     width: 100%;
     max-width: 350px;
     font-size: smaller;
@@ -9,13 +10,12 @@
 }
 
 .todoLeftList {
-        padding: 10px;
+    padding: 10px;
 }
 
 .leftListBottom {
     display: flex;
     position: sticky;
-    bottom: 0;
     justify-content: space-between;
     flex-direction: row-reverse;
     align-items: center;

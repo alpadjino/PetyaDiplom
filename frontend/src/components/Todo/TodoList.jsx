@@ -11,6 +11,7 @@ import { UserInfo } from "../Navbar/UserInfo/UserInfo";
 import { Outlet, useNavigate } from "react-router-dom";
 import { AddToGroupModal } from "./AddToGroupModal";
 import { OtherTodo } from "./OtherTodo";
+import { useIsMobileContext } from "../../context/IsMobileContext";
 
 export const TodoList = () => {
   const [todos, setTodos] = useState([]);
@@ -20,29 +21,7 @@ export const TodoList = () => {
   const isMounted = useRef(false);
   
   const { logout, user } = useAuth();
-
-  const [websckt, setWebsckt] = useState();
-  const [message, setMessage] = useState([]);
-  const [messages, setMessages] = useState([]);
-
-  // useEffect(() => {
-  //   const url = "ws://localhost:8000/ws/" + user.user_id;
-  //   const ws = new WebSocket(url);
-
-  //   ws.onopen = (event) => {
-  //     ws.send("Connect");
-  //   };
-
-  //   // recieve message every start page
-  //   ws.onmessage = (e) => {
-  //     const message = JSON.parse(e.data);
-  //     setMessages([...messages, message]);
-  //   };
-
-  //   setWebsckt(ws);
-  //   //clean up function when we close page
-  //   return () => ws.close();
-  // }, []);
+  const { isMobile } = useIsMobileContext();
 
   useEffect(() => {
     if (isMounted.current) return;
@@ -79,9 +58,10 @@ export const TodoList = () => {
     >
       <Flex
         className={styles.todoListContainer}
+        display={isMobile ? "none" : "flex"}
         bg={useColorModeValue("gray.100", "gray.200")}
       >
-        <Flex flexDirection={"column"} height="100%" gap={"10px"} width={"100%"}>
+        <Flex flexDirection={"column"} gap={"10px"} width={"100%"}>
           <UserInfo />
           <AddUpdateTodoModal onSuccess={fetchTodos} />
           <AddToGroupModal />
@@ -107,20 +87,6 @@ export const TodoList = () => {
             ))}
 
             <OtherTodo otherTodo={otherTodos} setLoading={setLoad} />
-
-            {/* {otherTodos.map((todo) => {
-              return (
-                <>
-                  <Text key={todo.name}>{todo.name}</Text>
-                  {todo.todos.map((todoData) => (
-                    <TodoCard
-                      todo={todoData}
-                      key={todo.todo_id}
-                    />
-                  ))}
-                </>
-              )
-            })} */}
           </Box>
         )}
 

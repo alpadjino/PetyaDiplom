@@ -17,6 +17,7 @@ import { AuthConsumer, AuthProvider } from "./context/JWTAuthContext";
 import { MainPage } from "./pages/MainPage";
 import { TodoProvider } from "./context/TodoIsOpenContext";
 import { InvitePage } from "./pages/InvitePage";
+import { MobileProvider } from "./context/IsMobileContext";
 
 function App() {
   return (
@@ -62,9 +63,11 @@ function App() {
                       path="/"
                       element={
                         <Authenticated>
-                          <TodoProvider>
-                            <TodoList />
-                          </TodoProvider>
+                          <MobileProvider>
+                            <TodoProvider>
+                              <TodoList />
+                            </TodoProvider>
+                          </MobileProvider>
                         </Authenticated>
                       }
                     >

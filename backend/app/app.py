@@ -36,25 +36,26 @@ async def app_init():
 
 @app.websocket("/ws/{user_id}")
 async def connect_user(websocket: WebSocket, user_id: UUID):
-    await websocket.accept()
+    await connections_container.user_todos.connect(user_id, websocket)
     try:
         while True:
             await websocket.receive_text()
     except WebSocketDisconnect:
-        return
+        connections_container.user_todos.disconnect(user_id, websocket)
 
 
-@app.websocket("/ws/{user_id}/{room_id}")
-async def connect_user_to_room(websocket: WebSocket, user_id: UUID, room_id: UUID):
+@app.websocket("/ws/{room_id}")
+async def connect_user_to_room(websocket: WebSocket, room_id: UUID):
     """Данный вебсокет открывает соединение юзера с тудушкой и следит за изменениями инфы в тудушке."""
-    await connections_container.todo_rooms.connect(room_id, websocket)
+    await connections_container.todo_details.connect(room_id, websocket)
     print(websocket)
     try:
         while True:
             todo_data = await websocket.receive_json()
-            await connections_container.todo_rooms.broadcast(todo_data, user_id)
+            await connections_container.todo_details.broadcast(todo_data)
+            await connections_container.todo_details.broadcast(todo_data)
     except WebSocketDisconnect:
-        connections_container.todo_rooms.disconnect(room_id, websocket)
+        connections_container.todo_details.disconnect(room_id, websocket)
 
 
 app.include_router(router, prefix=settings.API_V1_STR)

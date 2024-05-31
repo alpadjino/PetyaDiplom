@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import AsyncGenerator, Optional
 from uuid import UUID
 
 import pymongo
@@ -48,3 +48,9 @@ class UserService:
 
         await user.update({"$set": data.dict(exclude_unset=True)})
         return user
+
+    @staticmethod
+    async def get_users_by_todo_id(todo_id: UUID) -> AsyncGenerator[User, None]:
+        query = {"groups": UUID(todo_id)}
+        users = await User.find(query)
+        return (user async for user in users)

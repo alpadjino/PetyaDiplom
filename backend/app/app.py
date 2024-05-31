@@ -6,10 +6,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from app.api.api_v1.router import router
+from app.connection_managers.container import connections_container
 from app.core.config import settings
 from app.models.todo_model import Todo
 from app.models.user_model import User
-from backend.app.connection_managers.container import connections_container
 
 app = FastAPI(
     title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"
@@ -46,6 +46,7 @@ async def connect_user(websocket: WebSocket, user_id: UUID):
 
 @app.websocket("/ws/connect_{user_id}_to_{room_id}")
 async def connect_user_to_room(websocket: WebSocket, user_id: UUID, room_id: UUID):
+    """Данный вебсокет открывает соединение юзера с тудушкой и следит за изменениями инфы в тудушке."""
     await connections_container.todo_rooms.connect(room_id, websocket)
     try:
         while True:

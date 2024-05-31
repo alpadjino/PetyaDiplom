@@ -9,10 +9,11 @@ class ConnectionManager:
         self.connections: dict[UUID, list[WebSocket]] = defaultdict(list)
 
     async def connect(self, _id: UUID, websocket: WebSocket):
-        await websocket.accept()
         self.connections[_id].append(websocket)
-        print(self.connections)
+        print(self.connections.keys())
+        await websocket.accept()
+
+
 
     def disconnect(self, _id: UUID, websocket: WebSocket):
         self.connections[_id].remove(websocket)
-        print(self.connections)

@@ -25,24 +25,24 @@ export const TodoList = () => {
   const [message, setMessage] = useState([]);
   const [messages, setMessages] = useState([]);
 
-  useEffect(() => {
-    const url = "ws://localhost:8000/ws/" + user.user_id;
-    const ws = new WebSocket(url);
+  // useEffect(() => {
+  //   const url = "ws://localhost:8000/ws/" + user.user_id;
+  //   const ws = new WebSocket(url);
 
-    ws.onopen = (event) => {
-      ws.send("Connect");
-    };
+  //   ws.onopen = (event) => {
+  //     ws.send("Connect");
+  //   };
 
-    // recieve message every start page
-    ws.onmessage = (e) => {
-      const message = JSON.parse(e.data);
-      setMessages([...messages, message]);
-    };
+  //   // recieve message every start page
+  //   ws.onmessage = (e) => {
+  //     const message = JSON.parse(e.data);
+  //     setMessages([...messages, message]);
+  //   };
 
-    setWebsckt(ws);
-    //clean up function when we close page
-    return () => ws.close();
-  }, []);
+  //   setWebsckt(ws);
+  //   //clean up function when we close page
+  //   return () => ws.close();
+  // }, []);
 
   useEffect(() => {
     if (isMounted.current) return;

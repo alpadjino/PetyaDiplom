@@ -83,7 +83,7 @@ const Code = React.forwardRef(({ inline, children = [], className, ...props }, r
   return <code className={className} ref={ref}>{children}</code>;
 });
 
-export default function MardownEditor({ value, setValue, sendMessage, message }) {
+export default function MardownEditor({ value, setValue, commitMessage }) {
   const navigate = useNavigate();
 
   return (
@@ -161,8 +161,6 @@ export default function MardownEditor({ value, setValue, sendMessage, message })
                   ...value,
                   title: event.target.value,
                 };
-                sendMessage(updatedTodo);
-                console.log(message)
                 setValue(updatedTodo);
               }}
               bgColor="gray.100"
@@ -199,9 +197,11 @@ export default function MardownEditor({ value, setValue, sendMessage, message })
           }}
         />
 
-        {/* <Center>
-            <Button colorScheme="green">Сохранить</Button>
-          </Center> */}
+        <Center>
+          <Button colorScheme="green" onClick={() => commitMessage(value)}>
+            Сохранить изменения
+          </Button>
+        </Center>
       </Flex>
     </Box>
   );

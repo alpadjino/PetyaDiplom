@@ -20,6 +20,7 @@ import Details from "../TipTap/Details";
 import EditorJS from "@editorjs/editorjs";
 import { useTodoContext } from "../../context/TodoIsOpenContext";
 import { useAuth } from "../../hooks/useAuth";
+import { todoSave, todoUpdate } from "../../utils/apiFunctions";
 
 export const TodoDetail = () => {
   const [todo, setTodo] = useState({});
@@ -31,42 +32,31 @@ export const TodoDetail = () => {
   const { todoOpen, setTodoOpen } = useTodoContext();
 
     const [websckt, setWebsckt] = useState();
-    const [message, setMessage] = useState([]);
-    const [messages, setMessages] = useState([]);
 
-  useEffect(() => {
-      const url = "ws://localhost:8000/ws/" + user.user_id;
-      const ws = new WebSocket(url);
-      // TODO Тут должно быть подключение к руме
-      ws.onopen = (event) => {
-        ws.send("Connect");
-      };
+  const commitMessage = (message) => {
+    console.log("mes", message)
+    todoUpdate({ todoId: message.todo_id, data: message })
 
-      // recieve message every start page
-      ws.onmessage = (e) => {
-        const message = JSON.parse(e.data);
-        setMessages([...messages, message]);
-      };
-
-      setWebsckt(ws);
-      //clean up function when we close page
-      return () => ws.close();
-    }, []);
-
-  const sendMessage = (message) => {
-    websckt.send(message);
-    // recieve message every send message
-    websckt.onmessage = (e) => {
-      const message = JSON.parse(e.data);
-      setMessages([...messages, message]);
-    };
-    setMessage([]);
+    websckt.send((JSON.stringify(message)));
   };
 
   useEffect(() => {
-    console.log(todoOpen)
+    console.log("todo", todoOpen);
     if (todoOpen !== null) fetchTodo();
-  }, [todoId]);
+
+          const url = `ws://localhost:8000/ws/${user.user_id}/${todoId}`;
+          const ws = new WebSocket(url);
+
+          ws.onmessage = (e) => {
+            const message = JSON.parse(e.data);
+            console.log("KAIIIIF", message);
+            setTodoOpen(message);
+          };
+          
+          setWebsckt(ws);
+
+          return () => ws.close();
+  }, []);
 
   const fetchTodo = () => {
     setLoading(true);
@@ -101,49 +91,10 @@ export const TodoDetail = () => {
 
   return (
     <Flex width={"100%"} flexDir={"column"} mx={"15px"}>
-      {/* <Flex
-        bg={background}
-        minHeight="7rem"
-        flexDir={"column"}
-        my={3}
-        p={3}
-        rounded="lg"
-        alignItems="center"
-        justifyContent="space-between"
-      >
-        <Text fontSize={22}>{todo.title}</Text>
-        <Text bg="gray.500" mt={2} p={2} rounded="lg">
-          {todo.description}
-        </Text>
-        <AddUpdateTodoModal
-          my={3}
-          editable={true}
-          defaultValues={{
-            title: todo.title,
-            description: todo.description,
-            status: todo.status,
-          }}
-          onSuccess={fetchTodo}
-        />
-        <Button
-          isLoading={loading}
-          colorScheme="red"
-          width="100%"
-          onClick={delateTodo}
-        >
-          Удалить
-        </Button>
-      </Flex> */}
-      {/* <div>
-        <Tiptap setDescription={setDescription} />
-        <Details description={description} />
-      </div> */}
-
       <MarkdownEditor
         setValue={setTodoOpen}
         value={todoOpen}
-        sendMessage={sendMessage}
-        message={message}
+        commitMessage={commitMessage}
       />
       {/* 
       <EditorJS /> */}

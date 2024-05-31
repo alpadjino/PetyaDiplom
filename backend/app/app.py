@@ -44,14 +44,15 @@ async def connect_user(websocket: WebSocket, user_id: UUID):
         return
 
 
-@app.websocket("/ws/connect_{user_id}_to_{room_id}")
+@app.websocket("/ws/{user_id}/{room_id}")
 async def connect_user_to_room(websocket: WebSocket, user_id: UUID, room_id: UUID):
     """Данный вебсокет открывает соединение юзера с тудушкой и следит за изменениями инфы в тудушке."""
     await connections_container.todo_rooms.connect(room_id, websocket)
+    print(websocket)
     try:
         while True:
-            await websocket.receive_json()
-            await connections_container.todo_rooms.broadcast(room_id, user_id)
+            todo_data = await websocket.receive_json()
+            await connections_container.todo_rooms.broadcast(todo_data, user_id)
     except WebSocketDisconnect:
         connections_container.todo_rooms.disconnect(room_id, websocket)
 

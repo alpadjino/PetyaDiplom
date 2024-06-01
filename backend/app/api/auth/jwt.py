@@ -58,7 +58,7 @@ async def refresh_token(refresh_token: str = Body(...)):
             detail="Invalid token",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    user = await UserService.get_user_by_id(token_data.sub)
+    user = await UserService.get_user_by_user_id(token_data.sub)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

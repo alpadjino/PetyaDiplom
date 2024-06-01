@@ -15,7 +15,7 @@ import { useIsMobileContext } from "../../context/IsMobileContext";
 export const TodoCard = ({ todo, setLoading }) => {
   const { todoOpen, setTodoOpen } = useTodoContext();
   const { user } = useAuth();
-
+  console.log("totdo", todo)
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -89,29 +89,13 @@ export const TodoCard = ({ todo, setLoading }) => {
       </Flex>
 
       <Flex alignItems={"center"} gap={"5px"}>
-        <Badge
-          colorScheme={
-            todoOpen?.todo_id === todo.todo_id
-              ? todoOpen?.status
-                ? "green"
-                : "purple"
-              : todo?.status
-              ? "green"
-              : "purple"
-          }
-        >
-          {todoOpen?.todo_id === todo.todo_id
-            ? todoOpen?.status
-              ? "Выполнен"
-              : "Выполняется"
-            : todo?.status
-            ? "Выполнен"
-            : "Выполняется"}
+        <Badge colorScheme={todo?.status ? "green" : "purple"}>
+          {todo?.status ? "Выполнен" : "Выполняется"}
         </Badge>
         {todo.owner?.id == user._id && (
           <Menu>
             <MenuButton
-            onClick={(event) => event.stopPropagation()}
+              onClick={(event) => event.stopPropagation()}
               aria-label="Options"
               variant="outline"
               padding={"10px"}

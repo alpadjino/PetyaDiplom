@@ -19,14 +19,51 @@ export const TodoList = () => {
   const [loading, setLoading] = useState(true);
   const [load, setLoad] = useState(true);
   const isMounted = useRef(false);
+
+  const [websckt, setWebsckt] = useState();
   
   const { logout, user } = useAuth();
   const { isMobile } = useIsMobileContext();
 
+
   useEffect(() => {
-    if (isMounted.current) return;
     fetchTodos();
-    isMounted.current = true;
+    const url = `ws://localhost:8000/ws/user/${user.user_id}`;
+    const ws = new WebSocket(url);
+
+    ws.onmessage = (e) => {
+      const message = JSON.parse(e.data);
+      console.log("GENERAL", message);
+      setTodos((prev) =>
+        prev.map((res) => {
+          if (res.todo_id === message.todo_id) return message;
+
+          return res;
+        })
+      );
+    setOtherTodos((prev) =>
+      prev.map((item) => {
+        if (message.name) {
+          console.log("item",item)
+          return {
+            ...item,
+            todos: item.todos.map((todo) =>
+              todo.todo_id === message.todo_id ? message : todo
+            ),
+          };
+        }
+        return item;
+      })
+    );
+    };
+
+    setWebsckt(ws);
+
+    return () => {
+      ws.close();
+      console.log("Сломався");
+      setLoading(true);
+    };
   }, []);
 
   const fetchTodos = () => {
@@ -39,7 +76,7 @@ export const TodoList = () => {
       .then(async () => 
         await axiosInstance.get("/users/get_all_user_groups")
         .then((res) => {
-          console.log(res.data);
+          console.log("other",res.data);
           setOtherTodos(res.data);
         })
         .catch((error) => {
@@ -87,6 +124,7 @@ export const TodoList = () => {
             ))}
 
             <OtherTodo otherTodo={otherTodos} setLoading={setLoad} />
+            
           </Box>
         )}
 

@@ -55,7 +55,6 @@ export const AddUpdateTodoModal = ({
         await axiosInstance.post(`/todo/create/`, values)
         .then((res) =>{ 
           console.log(res.data)
-          setTodoOpen(res.data.todo_id);
           navigate(`/todos/${res.data.todo_id}`);
         });
       

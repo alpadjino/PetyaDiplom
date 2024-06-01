@@ -33,10 +33,9 @@ export const TodoDetail = () => {
   const { todoOpen, setTodoOpen } = useTodoContext();
   const { isMobile, setIsMobile, defaultValue} = useIsMobileContext();
 
-    const [websckt, setWebsckt] = useState();
+  const [websckt, setWebsckt] = useState();
 
   const commitMessage = (message) => {
-    console.log("mes", message)
     todoUpdate({ todoId: message.todo_id, data: message })
 
     websckt.send((JSON.stringify(message)));
@@ -49,12 +48,12 @@ export const TodoDetail = () => {
     console.log("todoOpen", todoOpen);
     if (todoOpen === null) fetchTodo();
 
-    const url = `ws://localhost:8000/ws/${user.user_id}/${todoId}`;
+    const url = `ws://localhost:8000/ws/todo/${todoId}`;
     const ws = new WebSocket(url);
 
     ws.onmessage = (e) => {
       const message = JSON.parse(e.data);
-      console.log("KAIIIIF", message);
+      console.log("DETAIL", message);
       setTodoOpen(message);
     };
 

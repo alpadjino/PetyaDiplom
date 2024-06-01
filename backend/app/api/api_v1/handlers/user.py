@@ -77,7 +77,6 @@ async def invite_to_group(data: UserGroups):
 async def get_user_groups_and_todos(user: User = Depends(get_current_user)):
     # try:
     todos_array = []
-    print(user.groups)
     # Найти пользователя, взять его группы, и вывести их
     # Нужно пройти по всем группам пользователя и получить полные данные из id.
     # Если имя группы новое, то создать новый ключ с тудушкой, если старое - в ключ с таким именем записать тудушку

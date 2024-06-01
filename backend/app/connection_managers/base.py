@@ -10,7 +10,6 @@ class ConnectionManager:
 
     async def connect(self, _id: UUID, websocket: WebSocket):
         self.connections[_id].append(websocket)
-        print(self.connections.keys())
         await websocket.accept()
 
 

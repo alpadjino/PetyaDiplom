@@ -1,6 +1,6 @@
-import { Box, Button, Center, Flex, Heading, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, Text, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import axiosInstance from '../services/axios';
 import { useAuth } from '../hooks/useAuth';
 
@@ -9,6 +9,9 @@ export const InvitePage = () => {
   const { user } = useAuth();
   const [inviteUserInfo, setInviteUserInfo] = useState(null);
 
+  const navigate = useNavigate();
+  const toast = useToast();
+
   const handleInvite = async () => {
     console.log(id, user.user_id)
     await axiosInstance
@@ -16,7 +19,15 @@ export const InvitePage = () => {
         invited_user_id: user.user_id,
         group_id: id,
       })
-      .then((res) => console.log(res))
+      .then((res) => {
+        toast({
+          colorScheme: "green",
+          description: "Вы присоединились к группе!",
+          title: "Успех!",
+          status: "success",
+        })
+        navigate('/');
+      })
       .catch((err) => console.log(err));
   }
 

@@ -40,7 +40,7 @@ Bob-->>John: Jolly good!
   /*Код, который позволяет подключить графики mermaid, взял с оф. документации на сайте npm @uiw/react-md-editor */
 }
 const randomid = () => parseInt(String(Math.random() * 1e15), 10).toString(36);
-const Code = React.forwardRef(({ inline, children = [], className, ...props }, ref) => {
+const Code = ({ inline, children = [], className, ...props }) => {
   const demoid = useRef(`dome${randomid()}`);
   const [container, setContainer] = useState(null);
   const isMermaid =
@@ -75,14 +75,12 @@ const Code = React.forwardRef(({ inline, children = [], className, ...props }, r
     return (
       <Fragment>
         <code id={demoid.current} style={{ display: "none" }} />
-        <code className={className} ref={refElement} data-name="mermaid">
-          {children}
-        </code>
+        <code className={className} ref={refElement} data-name="mermaid" />
       </Fragment>
     );
   }
-  return <code className={className} ref={ref}>{children}</code>;
-});
+  return <code className={className}>{children}</code>;
+};
 
 export default function MardownEditor({ value, setValue, commitMessage, loading }) {
   const navigate = useNavigate();

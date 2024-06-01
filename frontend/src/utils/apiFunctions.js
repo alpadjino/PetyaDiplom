@@ -10,13 +10,3 @@ export const todoSave = async (data) => {
 export const todoUpdate = async ({ todoId, data }) => {
   await axiosInstance.put(`/todo/${todoId}`, data);
 };
-
-// export const userInfoUpdate = async (data) => {
-//   await axiosInstance.post(`/users/update`, data);
-//   // Пример входных данных
-//   //   {
-//   //   "email": "user@example.com",
-//   //   "first_name": "string",
-//   //   "last_name": "string"
-//   // }
-// }

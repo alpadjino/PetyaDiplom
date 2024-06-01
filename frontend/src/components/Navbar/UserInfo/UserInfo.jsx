@@ -1,6 +1,6 @@
 import { EditIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useColorModeValue, useDisclosure, useToast } from "@chakra-ui/react";
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import styles from "./UserInfo.module.css";
 
@@ -12,6 +12,12 @@ export const UserInfo = () => {
 
   const toast = useToast();
   
+  useEffect(() => {
+    return () => {
+        
+    }
+  })
+
   const [userData, setUserData] = useState({ ...user });
   console.log(userData);
   // console.log(userData)

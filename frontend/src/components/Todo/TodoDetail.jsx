@@ -1,27 +1,18 @@
 import {
-  Box,
-  Button,
   Center,
   Container,
-  Flex,
   Spinner,
-  Text,
-  useColorModeValue,
-  useToast,
 } from "@chakra-ui/react";
-import { React, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { React, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import axiosInstance from "../../services/axios";
-import { AddUpdateTodoModal } from "./AddUpdateTodoModal";
 import MarkdownEditor from "../MardownEditor/MardownEditor";
-import { Tiptap } from "../TipTap/TipTap";
-import Details from "../TipTap/Details";
 
-import EditorJS from "@editorjs/editorjs";
 import { useTodoContext } from "../../context/TodoIsOpenContext";
 import { useAuth } from "../../hooks/useAuth";
-import { todoSave, todoUpdate } from "../../utils/apiFunctions";
+import { todoUpdate } from "../../utils/apiFunctions";
 import { useIsMobileContext } from "../../context/IsMobileContext";
+import EditorComponent from "../Editorjs/EditorJS";
 
 export const TodoDetail = () => {
   const [todo, setTodo] = useState({});
@@ -99,13 +90,19 @@ export const TodoDetail = () => {
   }
 
   return (
-    <Flex width={"100%"} flexDir={"column"} mx={"15px"}>
-      <MarkdownEditor
-        setValue={setTodoOpen}
-        value={todoOpen}
-        commitMessage={commitMessage}
-        loading={loading}
-      />
-    </Flex>
+    // <Flex width={"100%"} flexDir={"column"} mx={"15px"}>
+    //   <MarkdownEditor
+    //     setValue={setTodoOpen}
+    //     value={todoOpen}
+    //     commitMessage={commitMessage}
+    //     loading={loading}
+    //   />
+    // </Flex>
+    <EditorComponent
+      setValue={setTodoOpen}
+      value={todoOpen}
+      commitMessage={commitMessage}
+      loading={loading}
+    />
   );
 };

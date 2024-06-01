@@ -23,8 +23,8 @@ export const TodoCard = ({ todo, setLoading }) => {
 
   const delateTodo = () => {
     setLoading(true);
-    setTodoOpen(null);
     navigate("/");
+    setTodoOpen(null);
     
     axiosInstance
       .delete(`/todo/${todo.todo_id}`)
@@ -65,20 +65,25 @@ export const TodoCard = ({ todo, setLoading }) => {
         transform: "translateY(-3px)",
       }}
       onClick={() => {
+        console.log(todoOpen)
+        if (
+          todoOpen?.todo_id === todo?.todo_id &&
+          window.location.pathname === "/"
+        )
+          return;
+
         if (todoOpen === null) {
-          // setTodoOpen(todo);
           if (defaultValue === true) setIsMobile(defaultValue);
           navigate(`todos/${todo.todo_id}`);
         } else if (todoOpen.todo_id === todo.todo_id) {
-          todoUpdate({ todoId: todo.todo_id, data: todoOpen });
-          // setTodoOpen(null);
-          if (defaultValue === true) setIsMobile(!defaultValue);
-          navigate("/");
-        } else {
-          todoUpdate({ todoId: todoOpen.todo_id, data: todoOpen });
-          setTodoOpen(null);
-          navigate(`/todos/${todo.todo_id}`);
-        }
+            todoUpdate({ todoId: todo.todo_id, data: todoOpen });
+            if (defaultValue === true) setIsMobile(!defaultValue);
+            navigate("/");
+          } else {
+            todoUpdate({ todoId: todoOpen.todo_id, data: todoOpen });
+            setTodoOpen(null);
+            navigate(`/todos/${todo.todo_id}`);
+          }
       }}
     >
       <Flex alignItems={"center"} gap={"10px"}>
@@ -92,7 +97,7 @@ export const TodoCard = ({ todo, setLoading }) => {
         <Badge colorScheme={todo?.status ? "green" : "purple"}>
           {todo?.status ? "Выполнен" : "Выполняется"}
         </Badge>
-        {todo.owner?.id == user._id && (
+        {todo.owner?.id == user?._id && (
           <Menu>
             <MenuButton
               onClick={(event) => event.stopPropagation()}

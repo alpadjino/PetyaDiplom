@@ -5,19 +5,19 @@ from datetime import datetime
 
 class TodoCreate(BaseModel):
     title: str = Field(..., title="Title", max_length=755, min_length=1)
-    description: str = Field(..., title="Title", max_length=755, min_length=1)
+    description: dict = Field(..., title="Title")
     status: Optional[bool] = False
 
 
 class TodoUpdate(BaseModel):
     title: Optional[str] = Field(..., title="Title", max_length=755, min_length=1)
-    description: Optional[str] = Field(..., title="Title", max_length=755, min_length=1)
+    description: Optional[dict] = Field(..., title="Title")
     status: Optional[bool] = False
 
 class TodoOut(BaseModel):
     todo_id: UUID
     status: bool
     title: str
-    description: str
+    description: dict
     created_at: datetime
     updated_at: datetime

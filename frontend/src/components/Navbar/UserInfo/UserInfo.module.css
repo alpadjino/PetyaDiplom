@@ -7,9 +7,9 @@
 }
 
 .userInfo button:hover {
-    background-color: aliceblue;
+    background-color: #aeaca698;
 }
 
 .userInfo:hover {
-    background-color: darkgrey;
+    background-color: #aeaca63e;
 }

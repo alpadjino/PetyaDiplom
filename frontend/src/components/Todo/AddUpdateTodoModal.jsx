@@ -25,6 +25,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../services/axios";
 
 import { useTodoContext } from "../../context/TodoIsOpenContext";
+import { AddIcon } from "@chakra-ui/icons";
 
 export const AddUpdateTodoModal = ({
   defaultValues = {},
@@ -80,8 +81,16 @@ export const AddUpdateTodoModal = ({
   return (
     <Box {...rest}>
       <Flex gap={"10px"} mx={"10px"}>
-        <Button w="100%" outlineColor={"green"} colorScheme="green" onClick={onOpen}>
-          Создать
+        <Button
+          w="100%"
+          colorScheme={"none"}
+          color={useColorModeValue("black", "white")}
+          onClick={onOpen}
+          _hover={{
+            backgroundColor: "#aeaca63e",
+          }}
+        >
+          <AddIcon />
         </Button>
       </Flex>
       <Modal
@@ -123,7 +132,7 @@ export const AddUpdateTodoModal = ({
                     {errors.title && errors.title.message}
                   </FormErrorMessage>
                 </FormControl>
-                <FormControl isInvalid={errors.description}>
+                {/* <FormControl isInvalid={errors.description}>
                   <Textarea
                     rows={5}
                     placeholder="Добавить описание..."
@@ -147,7 +156,7 @@ export const AddUpdateTodoModal = ({
                   <FormErrorMessage>
                     {errors.description && errors.description.message}
                   </FormErrorMessage>
-                </FormControl>
+                </FormControl> */}
                 {/* <FormControl>
                   <MardownEditor
                     name="description"

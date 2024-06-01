@@ -96,7 +96,7 @@ export const TodoList = () => {
       <Flex
         className={styles.todoListContainer}
         display={isMobile ? "none" : "flex"}
-        bg={useColorModeValue("gray.100", "gray.200")}
+        bg={useColorModeValue("#EDECE9", "gray.800")}
       >
         <Flex flexDirection={"column"} gap={"10px"} width={"100%"}>
           <UserInfo />
@@ -124,13 +124,19 @@ export const TodoList = () => {
             ))}
 
             <OtherTodo otherTodo={otherTodos} setLoading={setLoad} />
-            
           </Box>
         )}
 
-        <Box className={styles.leftListBottom}>
+        <Box className={styles.leftListBottom} bg={"transparent"}>
           <ThemeToggler size="lg" />
-          <Button onClick={logout} colorScheme="green">
+          <Button
+            onClick={logout}
+            colorScheme="none"
+            color={useColorModeValue("black", "white")}
+            _hover={{
+              backgroundColor: "#aeaca63e",
+            }}
+          >
             Выйти
           </Button>
         </Box>

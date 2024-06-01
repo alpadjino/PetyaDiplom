@@ -28,7 +28,7 @@ export const UserInfo = () => {
   return (
     <Flex
       className={styles.userInfo}
-      bg={useColorModeValue("gray.300", "gray.600")}
+      bg={"transparent"}
     >
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -115,7 +115,7 @@ export const UserInfo = () => {
         onClick={onOpen}
         title="Редактировать профиль"
         colorScheme="none"
-        color={"black"}
+        color={useColorModeValue("black", "white")}
       >
         <EditIcon />
       </Button>

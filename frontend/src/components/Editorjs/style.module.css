@@ -1,0 +1,27 @@
+.main h1 {
+    font-size: 32px; /* Например, размер для h1 */
+}
+
+.main h2 {
+    font-size: 28px; /* Например, размер для h2 */
+}
+
+.main h3 {
+    font-size: 24px; /* Например, размер для h3 */
+}
+
+.main h4 {
+    font-size: 20px; /* Например, размер для h4 */
+}
+
+.main h5 {
+    font-size: 16px; /* Например, размер для h5 */
+}
+
+.main h6 {
+    font-size: 14px; /* Например, размер для h6 */
+}
+
+.main {
+    max-height: 80vh;
+}

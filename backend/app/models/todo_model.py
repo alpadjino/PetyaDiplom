@@ -13,7 +13,18 @@ class Todo(BaseModel):
     todo_id: UUID = Field(default_factory=uuid4, unique=True)
     status: bool = False
     title: Indexed(str)  # type: ignore
-    description: str | None = None
+    description: dict | None = {
+            'time': 1643195431504,
+            'blocks': [
+              {
+                'id': "o72AO0sY-1",
+                'type': "paragraph",
+                'data': {
+                  'text': "Начните тут",
+                },
+              },
+            ],
+          }
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     owner: Link[User]

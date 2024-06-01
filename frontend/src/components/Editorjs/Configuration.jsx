@@ -1,71 +1,97 @@
 import React from "react";
 import SimpleImage from "./SimpleImage";
+import List from "@editorjs/list";
+import NestedList from "@editorjs/nested-list";
+import Checklist from "@editorjs/checklist";
+import Quote from "@editorjs/quote";
+import Header from "editorjs-header-with-anchor";
+import Table from "@editorjs/table";
+import CodeBox from "@bomdi/codebox";
+import Delimiter from "@editorjs/delimiter";
+// import Paragraph from "@editorjs/paragraph";
+import TextVariantTune from "@editorjs/text-variant-tune";
+import Underline from "@editorjs/underline";
+import InlineCode from "@editorjs/inline-code";
+import Marker from "@editorjs/marker";
+import Title from "title-editorjs";
+import Paragraph from "editorjs-paragraph-with-alignment";
+import MermaidTool from "editorjs-mermaid";
 
-const Configuration = () => {
+
+const Configuration = (description, onReadyCallback) => {
+  console.log("description", description);
   return {
     /**
      * Id of Element that should contain Editor instance
      */
     holder: "editorjs",
     autofocus: true,
-
-    /**
-     * Available Tools list.
-     * Pass Tool's class or Settings object for each Tool you want to use
-     */
     tools: {
+      header: {
+        class: Header,
+        config: {
+          placeholder: "Enter a header",
+          levels: [1, 2, 3, 4, 5, 6],
+          defaultLevel: 3,
+        },
+      },
+      table: Table,
       image: {
         class: SimpleImage,
         inlineToolbar: true,
       },
+      list: {
+        class: List,
+        inlineToolbar: true,
+        config: {
+          defaultStyle: "unordered",
+        },
+      },
+      OrderedList: {
+        class: NestedList,
+        inlineToolbar: true,
+        config: {
+          defaultStyle: "ordered",
+        },
+      },
+      delimiter: Delimiter,
+      checklist: {
+        class: Checklist,
+        inlineToolbar: true,
+      },
+      quote: {
+        class: Quote,
+        inlineToolbar: true,
+      },
+      title: Title,
+      mermaid: MermaidTool,
+      paragraph: {
+        class: Paragraph,
+        inlineToolbar: true,
+        tunes: ["textVariant"],
+      },
+      textVariant: TextVariantTune,
+      underline: Underline,
+      inlineCode: {
+        class: InlineCode,
+        shortcut: "CMD+SHIFT+M",
+      },
+      Marker: {
+        class: Marker,
+        shortcut: "CMD+SHIFT+M",
+      },
+      codeBox: {
+        class: CodeBox,
+        config: {
+          themeURL:
+            "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/dracula.min.css", // Optional
+          themeName: "atom-one-dark", // Optional
+          useDefaultTheme: "light", // Optional. This also determines the background color of the language select drop-down
+        },
+      },
     },
-    /**
-     * Previously saved data that should be rendered
-     */
-    //  onReady: () => {
-    //     console.log('Editor.js is ready to work!')
-    //  },
-    //  onChange: (api, event) => {
-
-    //     console.log('Now I know that Editor\'s content changed!', event)
-    // },
-    data: {
-      time: 1643195431504,
-      blocks: [
-        {
-          id: "o72AO0sY-1",
-          type: "paragraph",
-          data: {
-            text: "sdjcvdhsvcdsghvchgdsvghcds",
-          },
-        },
-        {
-          id: "6LPs8gr9-a",
-          type: "paragraph",
-          data: {
-            text: "vhjsbdjvbhjdbvjhdhsbvjhdbjfvdv",
-          },
-        },
-        {
-          id: "c5vaZWuzj8",
-          type: "paragraph",
-          data: {
-            text: "fdjkbdjfjbvfdkbvfdnkbnkfdbfd",
-          },
-        },
-        {
-          type: "image",
-          data: {
-            url: "https://cdn.pixabay.com/photo/2017/09/01/21/53/blue-2705642_1280.jpg",
-            caption: "Here is a caption field",
-            withBorder: false,
-            withBackground: true,
-            stretched: false,
-          },
-        },
-      ],
-      version: "2.22.2",
-    },
+    data: description,
+    onReady: onReadyCallback, 
   };
 };
 

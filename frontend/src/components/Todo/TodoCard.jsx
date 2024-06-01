@@ -52,7 +52,8 @@ export const TodoCard = ({ todo, setLoading }) => {
 
   return (
     <Flex
-      bg={useColorModeValue("gray.300", "gray.600")}
+      bg={"transparent"}
+      color={useColorModeValue("black", "white")}
       minHeight="3rem"
       my={3}
       p={3}
@@ -63,9 +64,10 @@ export const TodoCard = ({ todo, setLoading }) => {
         opacity: 0.9,
         cursor: "pointer",
         transform: "translateY(-3px)",
+        backgroundColor: "#aeaca63e",
       }}
       onClick={() => {
-        console.log(todoOpen)
+        console.log(todoOpen);
         if (
           todoOpen?.todo_id === todo?.todo_id &&
           window.location.pathname === "/"
@@ -76,14 +78,14 @@ export const TodoCard = ({ todo, setLoading }) => {
           if (defaultValue === true) setIsMobile(defaultValue);
           navigate(`todos/${todo.todo_id}`);
         } else if (todoOpen.todo_id === todo.todo_id) {
-            todoUpdate({ todoId: todo.todo_id, data: todoOpen });
-            if (defaultValue === true) setIsMobile(!defaultValue);
-            navigate("/");
-          } else {
-            todoUpdate({ todoId: todoOpen.todo_id, data: todoOpen });
-            setTodoOpen(null);
-            navigate(`/todos/${todo.todo_id}`);
-          }
+          todoUpdate({ todoId: todo.todo_id, data: todoOpen });
+          if (defaultValue === true) setIsMobile(!defaultValue);
+          navigate("/");
+        } else {
+          todoUpdate({ todoId: todoOpen.todo_id, data: todoOpen });
+          setTodoOpen(null);
+          navigate(`/todos/${todo.todo_id}`);
+        }
       }}
     >
       <Flex alignItems={"center"} gap={"10px"}>

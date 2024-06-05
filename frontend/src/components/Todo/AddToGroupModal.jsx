@@ -1,6 +1,8 @@
 import { Button, useColorModeValue, useToast } from '@chakra-ui/react';
 import React from 'react'
 import { useAuth } from '../../hooks/useAuth';
+import { IoIosPersonAdd } from "react-icons/io";
+
 
 export const AddToGroupModal = () => {
   const toast = useToast();
@@ -8,6 +10,7 @@ export const AddToGroupModal = () => {
   
   return (
     <Button
+    title='Добавить в группу'
       colorScheme="none"
       color={useColorModeValue("black", "white")}
       _hover={{
@@ -28,7 +31,7 @@ export const AddToGroupModal = () => {
         });
       }}
     >
-      Добавить в группу
+      <IoIosPersonAdd fontSize={"25px"} />
     </Button>
   );
 }

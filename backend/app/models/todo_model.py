@@ -11,7 +11,7 @@ from .user_model import User
 
 class Todo(BaseModel):
     todo_id: UUID = Field(default_factory=uuid4, unique=True)
-    status: bool = False
+    status: int = 0
     title: Indexed(str)  # type: ignore
     description: dict | None = {
             'time': 1643195431504,

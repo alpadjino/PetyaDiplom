@@ -1,4 +1,4 @@
-import { Box, Button, Center, Flex, Heading, Text, useToast } from '@chakra-ui/react';
+import { Button, Center, Flex, Heading, Text, useColorModeValue, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axiosInstance from '../services/axios';
@@ -48,31 +48,46 @@ export const InvitePage = () => {
     <Center id="container" h={"100vh"} w={"100vw"}>
       <Center
         id="main"
+        bgColor={useColorModeValue("white", "#072b3d")}
         sx={{
           flexDirection: "column",
           borderWidth: "2px",
           padding: "30px",
           borderRadius: "20px",
-          bgColor: "white",
-          color: "black",
+          // boxShadow: "0px 0px 20px 4px #27a7e7",
         }}
       >
-        <Heading>Присоединиться к группе</Heading>
+        <Heading
+          color={useColorModeValue("black", "white")}
+          textAlign={"center"}
+        >
+          Присоединиться к группе
+        </Heading>
         <Flex
+          color={useColorModeValue("black", "white")}
           flexDirection={"column"}
-          alignItems={"center"}
-          justifyContent={"center"}
           my={"20px"}
-          borderColor={"black"}
+          borderColor={useColorModeValue("#778c97", "#778c97")}
           padding={"30px"}
           gap={"5px"}
           borderWidth={"2px"}
           borderRadius={"20px"}
         >
-          <Text>{inviteUserInfo?.username}</Text>
-          <Text>{inviteUserInfo?.email}</Text>
+          <Text>Название группы:</Text>
+          <Center>
+            <Text>{inviteUserInfo?.username}</Text>
+          </Center>
+          <Text>Почта владельца:</Text>
+          <Center>
+            <Text>{inviteUserInfo?.email}</Text>
+          </Center>
         </Flex>
-        <Button colorScheme="green" onClick={handleInvite}>Принять приглашение</Button>
+        <Button
+          colorScheme={useColorModeValue("green", "blue")}
+          onClick={handleInvite}
+        >
+          Принять приглашение
+        </Button>
       </Center>
     </Center>
   );

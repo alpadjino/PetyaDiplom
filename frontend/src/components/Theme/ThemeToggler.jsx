@@ -10,9 +10,10 @@ export const ThemeToggler = ({ showLabel = false, ...rest }) => {
         </FormLabel>
       )}
       <Switch
+        title="Переключить тему"
         id="theme-toggler"
-        size="sm"
         isChecked={colorMode === "dark"}
+        size={"sm"}
         isDisabled={false}
         value={colorMode}
         colorScheme="green"

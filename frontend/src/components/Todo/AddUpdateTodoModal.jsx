@@ -82,6 +82,7 @@ export const AddUpdateTodoModal = ({
     <Box {...rest}>
       <Flex gap={"10px"} mx={"10px"}>
         <Button
+        title="Создать новую группу"
           w="100%"
           colorScheme={"none"}
           color={useColorModeValue("black", "white")}
@@ -177,7 +178,7 @@ export const AddUpdateTodoModal = ({
                     {errors.description && errors.description.message}
                   </FormErrorMessage>
                 </FormControl> */}
-                <Controller
+                {/* <Controller
                   control={control}
                   name="status"
                   render={({ field }) => (
@@ -195,7 +196,7 @@ export const AddUpdateTodoModal = ({
                       />
                     </FormControl>
                   )}
-                />
+                /> */}
               </ModalBody>
               <ModalFooter>
                 <Stack direction="row" spacing={4}>

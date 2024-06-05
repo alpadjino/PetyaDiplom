@@ -9,7 +9,6 @@ export const OtherTodo = ({ otherTodo: otherTodos, setLoading: setLoading }) => 
       }
     return otherTodos.map((todo) => (
     <Box key={todo.name}>
-      <Text key={todo.name}>{todo.name}</Text>
       {todo.todos.map((todoData) => (
         <TodoCard todo={todoData} setLoading={setLoading} key={todo.todo_id} />
       ))}

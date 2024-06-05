@@ -1,4 +1,5 @@
 import {
+  Box,
   Center,
   Container,
   Spinner,
@@ -98,11 +99,11 @@ export const TodoDetail = () => {
     //     loading={loading}
     //   />
     // </Flex>
-    <EditorComponent
-      setValue={setTodoOpen}
-      value={todoOpen}
-      commitMessage={commitMessage}
-      loading={loading}
-    />
+      <EditorComponent
+        setValue={setTodoOpen}
+        value={todoOpen}
+        commitMessage={commitMessage}
+        loading={loading}
+      />
   );
 };

@@ -210,7 +210,7 @@ const handleStatusChange = async (e) => {
                   >
                     <BsThreeDotsVertical />
                   </MenuButton>
-                  <MenuList position={"absolute"} zIndex={"100"}>
+                  <MenuList position={"absolute"} zIndex={"990"}>
                     <MenuItem icon={<IoCopy />} onClick={handleDuplicate}>
                       Дублировать
                     </MenuItem>

@@ -29,8 +29,23 @@ const EditorComponent = ({ setValue, value, commitMessage, loading }) => {
     MermaidTool.config({ theme: "neutral" });
     new DragDrop(editor); // Инициализация DragDrop после завершения EditorJS
   };
-console.log(title)
   useEffect(() => {
+    const handlePageRefresh = (event) => {
+      const confirmationMessage = "Вы уверены, что хотите обновить страницу?";
+      event.returnValue = confirmationMessage; // Для подтверждения обновления страницы в стандартном браузерном окне
+      return confirmationMessage; // Для стандартных браузеров
+    };
+
+    window.addEventListener("beforeunload", handlePageRefresh);
+
+    return () => {
+      window.removeEventListener("beforeunload", handlePageRefresh);
+    };
+  }, []);
+  useEffect(() => {
+    
+    setTitle(value?.title);
+
     const editor = new EditorJS(Configuration(value?.description), handleReady);
     setEditor(editor);
     console.log("render");
@@ -124,8 +139,7 @@ console.log(title)
           </Button>
         </Flex>
 
-        <Flex flexDirection={"column"} alignItems={"center"} maxWidth={"300px"}>
-          <Text>Заголовок</Text>
+        <Flex flexDirection={"column"} alignItems={"center"} maxWidth={"300px"} marginTop="20px">
           <Input
             value={title}
             onChange={(event) => setTitle(event.target.value)}

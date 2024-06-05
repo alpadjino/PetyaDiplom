@@ -67,20 +67,21 @@ export const InvitePage = () => {
           color={useColorModeValue("black", "white")}
           flexDirection={"column"}
           my={"20px"}
-          borderColor={useColorModeValue("#778c97", "#778c97")}
           padding={"30px"}
           gap={"5px"}
-          borderWidth={"2px"}
-          borderRadius={"20px"}
         >
-          <Text>Название группы:</Text>
-          <Center>
+          <Flex alignItems={"center"} gap={"5px"}>
+            <Text fontSize={"18px"} fontWeight={"400"}>
+              Название группы:
+            </Text>
             <Text>{inviteUserInfo?.username}</Text>
-          </Center>
-          <Text>Почта владельца:</Text>
-          <Center>
+          </Flex>
+          <Flex alignItems={"center"} gap={"5px"}>
+            <Text fontSize={"18px"} fontWeight={"400"}>
+              Почта владельца:
+            </Text>
             <Text>{inviteUserInfo?.email}</Text>
-          </Center>
+          </Flex>
         </Flex>
         <Button
           colorScheme={useColorModeValue("green", "blue")}

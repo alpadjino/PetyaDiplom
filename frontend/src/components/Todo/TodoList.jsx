@@ -135,7 +135,7 @@ export const TodoList = () => {
           flexDirection={"column"}
           position={"sticky"}
           bottom={0}
-          bgColor={"#aeaca69f"}
+          bgColor={"#aeaca6"}
           justifyContent={"center"}
           w={"100%"}
         >

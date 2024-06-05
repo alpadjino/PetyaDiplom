@@ -1,3 +1,7 @@
+.main {
+    font-weight: 600;
+}
+
 .main h1 {
     font-size: 32px; /* Например, размер для h1 */
 }
